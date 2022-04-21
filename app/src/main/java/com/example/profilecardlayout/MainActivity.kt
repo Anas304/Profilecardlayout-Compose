@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -21,6 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.example.profilecardlayout.ui.theme.lightGreen
 
@@ -66,6 +69,7 @@ fun AppBar() {
 @Composable
 fun ProfileCard(userProfile: UserProfile) {
     Card(
+        shape = CutCornerShape(topEnd = 24.dp) ,
         modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
             .fillMaxWidth()
@@ -85,6 +89,7 @@ fun ProfileCard(userProfile: UserProfile) {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ProfilePicture(drawableImage: Int, onlineStatus: Boolean) {
 
@@ -100,9 +105,10 @@ fun ProfilePicture(drawableImage: Int, onlineStatus: Boolean) {
     ) {
         Image(
             modifier = Modifier.size(72.dp),
-            painter = painterResource(
-                id = drawableImage
-            ),
+            painter = rememberImagePainter(data = drawableImage,
+            builder = {
+                /** Empty for now*/
+            }),
             contentDescription = "Content Description",
             contentScale = ContentScale.Crop
         )
