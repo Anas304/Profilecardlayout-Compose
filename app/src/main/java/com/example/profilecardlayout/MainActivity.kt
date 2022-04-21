@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.example.profilecardlayout.ui.theme.lightGreen
 
@@ -31,7 +32,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            ProfileCardLayoutTheme{
+                MainScreen()
+            }
+
         }
     }
 }
@@ -82,7 +86,7 @@ fun ProfileCard(userProfile: UserProfile) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
         ) {
-            ProfilePicture(userProfile.drawableImage, userProfile.status)
+            ProfilePicture(userProfile.pictureUrl, userProfile.status)
             ProfileContent(userProfile.name, userProfile.status)
         }
 
@@ -91,7 +95,7 @@ fun ProfileCard(userProfile: UserProfile) {
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun ProfilePicture(drawableImage: Int, onlineStatus: Boolean) {
+fun ProfilePicture(pictureUrl: String, onlineStatus: Boolean) {
 
     Card(
         shape = CircleShape,
@@ -105,12 +109,12 @@ fun ProfilePicture(drawableImage: Int, onlineStatus: Boolean) {
     ) {
         Image(
             modifier = Modifier.size(72.dp),
-            painter = rememberImagePainter(data = drawableImage,
+            painter = rememberImagePainter(data = pictureUrl,
             builder = {
                 /** Empty for now*/
+                transformations(CircleCropTransformation())
             }),
             contentDescription = "Content Description",
-            contentScale = ContentScale.Crop
         )
     }
 }
