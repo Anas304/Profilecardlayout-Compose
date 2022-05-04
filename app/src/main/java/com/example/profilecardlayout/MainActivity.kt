@@ -102,8 +102,7 @@ fun ProfilePicture(pictureUrl: String, onlineStatus: Boolean) {
         border = BorderStroke(
             width = 2.dp,
             color = if (onlineStatus)
-                MaterialTheme.colors.lightGreen else Color.Red
-        ),
+                MaterialTheme.colors.lightGreen else Color.Red),
         modifier = Modifier.padding(16.dp),
         elevation = 8.dp
     ) {
