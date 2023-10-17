@@ -1,5 +1,7 @@
 package com.example.profilecardlayout
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,13 +38,14 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.example.profilecardlayout.ui.theme.lightGreen
+import com.google.ar.core.examples.java.geospatial.GeospatialActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ProfileCardLayoutTheme {
-                UserApplication()
+                UserApplication(context = this)
             }
 
         }
@@ -50,11 +53,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun UserApplication(userProfiles: List<UserProfile> = userProfileList) {
+fun UserApplication(userProfiles: List<UserProfile> = userProfileList, context: Context) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "user_list") {
         composable("user_list") {
-            UserListScreen(userProfiles, navController)
+            UserListScreen(userProfiles, navController, context)
         }
         composable(
             "user_details_screen/{userId}",
@@ -68,7 +71,11 @@ fun UserApplication(userProfiles: List<UserProfile> = userProfileList) {
 }
 
 @Composable
-fun UserListScreen(userProfiles: List<UserProfile>, navController: NavController?) {
+fun UserListScreen(
+    userProfiles: List<UserProfile>,
+    navController: NavController?,
+    context: Context
+) {
     Scaffold(topBar = {
         AppBar(
             title = "User List",
@@ -79,13 +86,24 @@ fun UserListScreen(userProfiles: List<UserProfile>, navController: NavController
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {
-            LazyColumn() {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 20.dp)
+            ) {
+                Button(onClick = {
+                    context.startActivity(Intent(context, GeospatialActivity::class.java))
+                }) {
+                    Text(text = "Start Goespatial Activity")
+                }
+            }
+           /* LazyColumn() {
                 items(userProfiles) { userProfile ->
                     ProfileCard(userProfile = userProfile, onClick = {
                         navController?.navigate("user_details_screen/${userProfile.id}")
                     })
                 }
-            }
+            }*/
         }
     }
 }
@@ -217,10 +235,10 @@ fun UserDetailsScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun UserListPreview() {
-    ProfileCardLayoutTheme {
-        UserListScreen(userProfiles = userProfileList, null)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun UserListPreview() {
+//    ProfileCardLayoutTheme {
+//        UserListScreen(userProfiles = userProfileList, null)
+//    }
+//}
